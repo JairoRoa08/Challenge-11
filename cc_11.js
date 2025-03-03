@@ -1,4 +1,4 @@
-//  Task 1: Creating a Book Class
+// Task 1: Creating a Book Class
 class Book {
     constructor (title, author, isbn, copies) {
         this.title = title;
@@ -7,18 +7,17 @@ class Book {
         this.copies = copies;
     }
 
+    getDetails () {
+        return `Title: ${this.title}, Author: ${this.author}, ISBN: ${this.isbn}, Copies: ${this.copies}`;
+    }
 
-getDetails () {
-    return `Title: ${this.title}, Author: ${this.author}, ISBN: ${this.isbn}, Copies: ${this.copies}`;
+    updateCopies (quantity) {
+        this.copies += quantity;
+    }
 }
 
-updateCopies (quantity) {
-    this.copies += quantity;
-}
-}
 const book1 = new Book("The Great Gatsby", "F. Scott Fitzgerald", 123456, 5);
 console.log(book1.getDetails()); 
-
 book1.updateCopies(-1);
 console.log(book1.getDetails()); 
 
@@ -26,40 +25,24 @@ console.log(book1.getDetails());
 class Borrower {
     constructor(name, borrowerId) {
         this.name = name;
-        this.borrowerId;
-        this,borrowedBooks = [];
+        this.borrowerId = borrowerId;
+        this.borrowedBooks = [];
     }
-borrowBook(book) {
-    this.borrowedBooks.push(book);
+
+    borrowBook(book) {
+        this.borrowedBooks.push(book);
+    }
+
+    returnBook(book) {
+        this.borrowedBooks = this.borrowedBooks.filter(title => title !== book);
+    }
 }
-returnBook(book) {
-    this.borrowedBooks = this.borrowedBooks.filter(title => title !== book);
-}
-}
+
 const borrower1 = new Borrower("Alice Johnson", 201);
 borrower1.borrowBook("The Great Gatsby");
 console.log(borrower1.borrowedBooks); 
 
-//
-class Library {
-    constructor() {
-        this.books = [];
-        this.borrowers = [];
-    }
-    addBook(book) {
-        this.books.push(book);
-    }
-
-    listBooks() {
-        this.books.forEach(book => console.log(book.getDetails()));
-    }
-}
-const library = new Library();
-
-library.addBook(book1);
-library.listBooks();
-
-// Task 4: Implementing Book Borrowing
+// Task 3: Library Class for adding books and borrowers
 class Library {
     constructor() {
         this.books = [];
@@ -78,6 +61,7 @@ class Library {
         this.borrowers.push(borrower);
     }
 
+// Task 4: Implementing Book Borrowing
     lendBook(borrowerId, isbn) {
         const borrower = this.borrowers.find(b => b.borrowerId === borrowerId);
         const book = this.books.find(b => b.isbn === isbn);
@@ -100,20 +84,25 @@ class Library {
             console.log(`No copies available for "${book.title}".`);
         }
     }
-}
+// Task 5: Implementing Book Returns
+    returnBook(borrowerId, isbn) {
+        const borrower = this.borrowers.find(b => b.borrowerId === borrowerId);
+        const book = this.books.find(b => b.isbn === isbn);
+    
+        if (!borrower || !book || !borrower.borrowedBooks.includes(book.title)) return;
+    
+        book.updateCopies(1);
+        borrower.returnBook(book.title);
+    }
+    }
+const library = new Library();
 library.addBook(book1);
 library.addBorrower(borrower1);
+
 library.lendBook(201, 123456);
-console.log(book1.getDetails()); 
+console.log(book1.getDetails());
+console.log(borrower1.borrowedBooks);
+
+library.returnBook(201, 123456);
+console.log(book1.getDetails());
 console.log(borrower1.borrowedBooks); 
-
-// Task 5: Implementing Book Returns
-returnBook(borrowerId, isbn) {
-    const borrower = this.borrowers.find(b => b.borrowerId === borrowerId);
-    const book = this.books.find(b => b.isbn === isbn);
-
-    if (!borrower || !book || !borrower.borrowedBooks.includes(book.title)) return;
-
-    book.updateCopies(1);
-    borrower.returnBook(book.title);
-}
