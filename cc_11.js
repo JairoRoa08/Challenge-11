@@ -106,3 +106,14 @@ library.addBorrower(borrower1);
 library.lendBook(201, 123456);
 console.log(book1.getDetails()); 
 console.log(borrower1.borrowedBooks); 
+
+// Task 5: Implementing Book Returns
+returnBook(borrowerId, isbn) {
+    const borrower = this.borrowers.find(b => b.borrowerId === borrowerId);
+    const book = this.books.find(b => b.isbn === isbn);
+
+    if (!borrower || !book || !borrower.borrowedBooks.includes(book.title)) return;
+
+    book.updateCopies(1);
+    borrower.returnBook(book.title);
+}
